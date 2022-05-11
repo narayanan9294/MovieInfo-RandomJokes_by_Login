@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="topnav">
+
+        <!-- Centered link -->
+        <div class="topnav-centered">
+            <a style="font-family: Bebas Neue; " onclick="enableMovieinfo()"  >MovieInfo</a>
+          <a style="font-family: Bebas Neue; " onclick=" enableRandomJokes()">Random Jokes</a>
+        </div>
+                   
+        <!-- Right-aligned links -->
+        <div class="topnav-right">
+          <a  href="index.html"> Login</a>
+          <a  href="register.html">Register</a>
+        </div>
+      
+      </div>
+
+
+<form action="" id="loginPage" method="post">
+  Username : <input type="text" name="uName" id="uName" autocomplete="off" placeholder="Enter username" required> <br><br>
+  Password : <input type="password" name="pwd" id="pwd" autocomplete="off" placeholder="Enter Password" required > <br><br>
+  <input type="button" onclick="doLogin()" value="Login"> <br><br>
+  <a href="register.html" style="font-family: Georgia, 'Times New Roman', Times, serif;color: #f2f2f2;  font-size: 17px;">Don't have an account yet?</a>
+</form>
+
+
+          <!-- <div id="loginPage">
+            <h1>Login Page</h1> <br>
+            Username: <input type="text" required> <br><br>
+            Password <input type="password" name="" id="" required> <br><br>
+            <button style="font-family: Georgia, 'Times New Roman', Times, serif;  background-color: #333;color: #f2f2f2;  font-size: 17px;">Login</button> <br> <br>
+            <a href="register.html" style="font-family: Georgia, 'Times New Roman', Times, serif;color: #f2f2f2;  font-size: 17px;">Don't have an account yet?</a>
+          </div> -->
+        </header>
+ <footer>
+     <h6>Copyright © 2022</h6>
+ </footer>
+</body>
+<script>
+ 
+function doLogin(){
+
+if(localStorage.getItem("registerUsers")==null){
+  alert("Please Register UserID first") 
+  
+  return false} else{
+
+  var isUserAvailble = false;
+ var arrayItem= JSON.parse(localStorage.getItem("registerUsers")) ;
+ var userName = document.getElementById("uName").value;
+ var passWord = document.getElementById("pwd").value;
+ console.log(userName);
+ console.log(passWord)
+ console.log(arrayItem)
+      for(var i =0; i<arrayItem.length; i++){
+         if (arrayItem[i].username == userName && arrayItem[i].password == passWord){
+          isUserAvailble = true;
+          var loggedUser = userName;
+          localStorage.setItem("loggedUser", JSON.stringify(loggedUser))
+          alert("Login Successfully")
+          console.log(loggedUser)
+          console.log(arrayItem)
+            //  document.getElementById("uname").innerHTML =""
+            //  goToNext();
+            console.log(isUserAvailble)
+           
+            enableRandomJokes()
+document.getElementById("uName").value="";
+document.getElementById("pwd").value="";
+            break;
+     } else if (userName=="" || passWord =="") {
+       alert("Please fill the both field")
+     } else if((arrayItem[i].username != userName && arrayItem[i].password == passWord) || (arrayItem[i].username == userName && arrayItem[i].password != passWord)){
+       alert("Incorrect username-password combination")
+     }
+    //  else{
+    //    alert("incorrect username - password combination")
+    //     //  document.getElementById("res").innerHTML =  "incorrect username - password combination"
+    //     //  document.getElementById("res").style.color = "red"
+    //  }
+     console.log(isUserAvailble)}
+    
+     function enableNavbarMovie(){
+  if(loggedUser){
+window.location.href = "movieinfo.html"
+  } else {
+    alert("Please login first")
+  }
+}
+
+
+     console.log(isUserAvailble)
+}
+}
+ 
+function enableRandomJokes(){
+  if((localStorage.getItem("loggedUser")) != null){
+  window.location.href = "content.html"
+} else{
+  alert("Please Login first")
+}}
+
+function enableMovieinfo(){
+if((localStorage.getItem("loggedUser")) != null){
+  window.location.href = "content.html"
+} else{
+  alert("Please Login first")
+}
+}
+</script>
+</html>
