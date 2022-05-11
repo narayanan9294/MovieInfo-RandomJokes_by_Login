@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    
+    <div class="topnav">
+
+        <!-- Centered link -->
+        <div class="topnav-centered">
+            <a href="#movieInfo">MovieInfo</a>
+          <a href="#randomJokes">Random Jokes</a>
+        </div>
+                   
+        <!-- Right-aligned links -->
+        <div class="topnav-right">
+            <a href="index.html">Login</a>
+            <a href="register.html">Register</a>
+        </div>
+      
+      </div>
+
+         <!-- <div id="loginPage">
+            <h1>Registration</h1> <br>
+            Username: <input id="uName" type="text" placeholder="Enter username" required> <br><br>
+            Password <input  type="password" name="" id="pwd" placeholder="Enter Password" required > <br><br>
+            Email <input type="email" name="" id="mail"  placeholder="Enter EmailID" required> <br> <br> -->
+
+<form id="loginPage" action="index.html" method="post">
+    <p id="res"> </p>
+   Username <input type="text" name="uName" id="uName" autocomplete="off" placeholder="Enter username" required> <br><br>
+   Password: <input type="password" name="pwd" id="pwd" autocomplete="off" placeholder="Enter Password" required><br> <br>
+   Email: <input type="email" pattern="[^ @]*@[^ @]*" name="mail" id="mail"  autocomplete="off" placeholder="Enter EmailID" required> <br> <br>
+   <input onclick="doRegister()"  type="submit" value="Register">
+
+</form>
+
+
+
+            <!-- <button id="RegisterBtn" onclick="doRegister()" style="font-family: Georgia, 'Times New Roman', Times, serif;  background-color: #333;color: #f2f2f2;  font-size: 17px;">Register</button>
+          </div> -->
+       
+        </header>
+ <footer>
+     <h6>Copyright © 2022</h6>
+ </footer>
+
+</body>
+<script>
+
+    function doRegister(){
+
+        
+        var username = document.getElementById("uName").value;
+var password = document.getElementById("pwd").value;
+var mailId = document.getElementById("mail").value;
+
+if(mailId.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)){
+    var registerUsers;
+var userData;
+        if (localStorage.getItem("registerUsers") == null){
+     registerUsers =[];
+ userData = {};
+  userData.username = username;
+userData.password = password;
+userData.mailId = mailId;
+registerUsers.push(userData);
+localStorage.setItem("registerUsers", JSON.stringify(registerUsers))
+// localStorage.clear()
+console.log(registerUsers)
+document.getElementById("res").innerHTML = "user registered successfullly"
+document.getElementById("uName").value=""
+document.getElementById("pwd").value=""
+document.getElementById("mail").value=""
+// window.location.href="register.html"
+}
+ else {
+registerUsers = JSON.parse(localStorage.getItem("registerUsers"))
+userData = {};
+userData.username = username;
+userData.password = password;
+userData.mailId = mailId;
+registerUsers.push(userData);
+console.log(registerUsers)
+// registerUsers.push(userData);
+localStorage.setItem("registerUsers", JSON.stringify(registerUsers))
+console.log(registerUsers)
+ }
+} else{
+    alert (" You have entered an invalid email address!")
+}
+
+
+
+
+    }
+
+// console.log(registerUsers)
+
+</script>
+</html>
