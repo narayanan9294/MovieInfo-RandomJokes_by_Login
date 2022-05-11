@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+    <div class="topnav">
+
+        <!-- Centered link -->
+        <div class="topnav-centered">
+            <a style="font-family: Bebas Neue; " onclick="enableMovieinfo()"  >MovieInfo</a>
+          <a style="font-family: Bebas Neue; " onclick=" enableRandomJokes()">Random Jokes</a>
+        </div>
+                   
+        <!-- Right-aligned links -->
+        <div class="topnav-right">
+          <!-- <p ></p> -->
+          <a  id="loUser" >Register</a>
+          <a  type="button" onclick="logOutUser()" >Log out</a>
+        </div>
+      
+      </div>
+
+<div id="content">
+
+
+<div id="movieInfo" style="display: none;">
+    MovieName <input type="text" name="" id="inputData" onblur="getMovieInfo(this.value)">
+    <div style="display: none;" id="mData">
+        <h1>Movie info</h1>
+     <span style="font-weight: bold;"> Movie Title:</span> <span id="movieTitle"></span> <br>
+     <span style="font-weight: bold;"> Director:</span>  <span id="director"></span> <br>
+     <span style="font-weight: bold;"> Release Year:</span>  <span id="released"></span> <br>
+     <span style="font-weight: bold;"> RunTime:</span>  <span id="runTime"></span> <br>
+<img src="" alt="" id="mImg">        
+    </div>
+</div>
+   
+<div id="raJokes"  style="display: none;">
+    <h1>Random Jokes</h1>
+    <p id="randomJokes"></p>
+    <button onclick="randomJokesGen()">Next</button>
+</div>
+    
+
+
+</div>
+
+</body>
+
+<script>
+
+function loUser(){
+    var logUser = localStorage.getItem("loggedUser");
+    logUser = logUser.replace(/['"]+/g, '')
+    var printNav = "Welcome"+"  " + logUser
+    document.getElementById("loUser").innerText = printNav 
+   
+}
+loUser()
+
+function enableMovieinfo(){
+    document.getElementById("movieInfo").style.display="block";
+    document.getElementById("raJokes").style.display="none"
+}
+
+
+function enableRandomJokes(){
+    document.getElementById("movieInfo").style.display="none";
+    document.getElementById("raJokes").style.display="block" 
+}
+
+
+function getMovieInfo(movieName){
+   
+    
+// alert(movieName)
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function (){
+    //   alert(xhttp.readyState);
+    if(xhttp.readyState<4){  
+        document.getElementById("mData").style.display = "block" 
+        document.getElementById("mImg").src = "loader.gif"
+      }
+      else if(xhttp.readyState==4 && xhttp.status==200){
+document.getElementById("mData").style.display = "block";
+var movieData = xhttp.responseText;
+document.getElementById("mImg").src = JSON.parse(xhttp.responseText).Poster;
+document.getElementById("movieTitle").innerText= JSON.parse(xhttp.responseText).Title;
+document.getElementById("director").innerHTML= JSON.parse(xhttp.responseText).Director;
+document.getElementById("released").innerHTML= JSON.parse(xhttp.responseText).Released;
+document.getElementById("runTime").innerHTML= JSON.parse(xhttp.responseText).Runtime;
+document.getElementById("inputData").value = ""
+
+console.log(movieData);
+      } 
+  }
+  xhttp.open("GET","https://omdbapi.com/?t="+movieName+"&apikey=c429066e", true);
+  xhttp.send();
+  
+  }
+
+
+
+  var userLoggedIn = localStorage.getItem("loggedUser");
+//  console.log(userLoggedIn)
+    function randomJokesGen(){
+// alert(movieName)
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function (){
+    //   alert(xhttp.readyState);
+    if(xhttp.readyState==4 && xhttp.status==200){
+// document.getElementById("randomJokes").innerHTML = "block";
+var movieData = xhttp.responseText;
+document.getElementById("randomJokes").innerHTML = JSON.parse(xhttp.responseText).value.joke;
+// document.getElementById("movieTitle").innerText= JSON.parse(xhttp.responseText).Title;
+// document.getElementById("director").innerHTML= JSON.parse(xhttp.responseText).Director;
+// document.getElementById("released").innerHTML= JSON.parse(xhttp.responseText).Released;
+// document.getElementById("runTime").innerHTML= JSON.parse(xhttp.responseText).Runtime;
+
+// console.log(movieData);
+      }}
+  xhttp.open("GET","https://api.icndb.com/jokes/random", true);
+  xhttp.send();
+  
+  }
+  randomJokesGen()
+
+
+function logOutUser (){ 
+   window.location.href = "index.html"
+    localStorage.removeItem("loggedUser");
+   
+}
+
+</script>
+
+
+</html>
