@@ -13,139 +13,98 @@
 
         <!-- Centered link -->
         <div class="topnav-centered">
-            <a style="font-family: Bebas Neue; " onclick="enableMovieinfo()"  >MovieInfo</a>
-          <a style="font-family: Bebas Neue; " onclick=" enableRandomJokes()">Random Jokes</a>
+            <a style="font-family: Bebas Neue; " onclick="enableMovieinfo()">MovieInfo</a>
+            <a style="font-family: Bebas Neue; " onclick="enableRandomJokes()">Random Jokes</a>
         </div>
                    
         <!-- Right-aligned links -->
         <div class="topnav-right">
           <!-- <p ></p> -->
-          <a  id="loUser" >Register</a>
-          <a  type="button" onclick="logOutUser()" >Log out</a>
+          <a id="loUser">Register</a>
+          <a type="button" onclick="logOutUser()">Log out</a>
         </div>
       
-      </div>
-
-<div id="content">
-
-
-<div id="movieInfo" style="display: none;">
-    MovieName <input type="text" name="" id="inputData" onblur="getMovieInfo(this.value)">
-    <div style="display: none;" id="mData">
-        <h1>Movie info</h1>
-     <span style="font-weight: bold;"> Movie Title:</span> <span id="movieTitle"></span> <br>
-     <span style="font-weight: bold;"> Director:</span>  <span id="director"></span> <br>
-     <span style="font-weight: bold;"> Release Year:</span>  <span id="released"></span> <br>
-     <span style="font-weight: bold;"> RunTime:</span>  <span id="runTime"></span> <br>
-<img src="" alt="" id="mImg">        
     </div>
-</div>
+
+    <div id="content">
+
+        <div id="movieInfo" style="display: none;">
+            MovieName <input type="text" name="" id="inputData" onblur="getMovieInfo(this.value)">
+            <div style="display: none;" id="mData">
+                <h1>Movie info</h1>
+                <span style="font-weight: bold;"> Movie Title:</span> <span id="movieTitle"></span> <br>
+                <span style="font-weight: bold;"> Director:</span>  <span id="director"></span> <br>
+                <span style="font-weight: bold;"> Release Year:</span>  <span id="released"></span> <br>
+                <span style="font-weight: bold;"> RunTime:</span>  <span id="runTime"></span> <br>
+                <img src="" alt="" id="mImg">        
+            </div>
+        </div>
    
-<div id="raJokes"  style="display: none;">
-    <h1>Random Jokes</h1>
-    <p id="randomJokes"></p>
-    <button onclick="randomJokesGen()">Next</button>
-</div>
-    
+        <div id="raJokes"  style="display: none;">
+            <h1>Random Jokes</h1>
+            <p id="randomJokes"></p>
+            <button onclick="randomJokesGen()">Next</button>
+        </div>
+    </div>
 
+    <script>
+        function loUser() {
+            var logUser = localStorage.getItem("loggedUser");
+            logUser = logUser.replace(/['"]+/g, '');
+            var printNav = "Welcome" + "  " + logUser;
+            document.getElementById("loUser").innerText = printNav;
+        }
+        loUser()
 
-</div>
+        function enableMovieinfo() {
+            document.getElementById("movieInfo").style.display = "block";
+            document.getElementById("raJokes").style.display = "none";
+        }
 
+        function enableRandomJokes() {
+            document.getElementById("movieInfo").style.display = "none";
+            document.getElementById("raJokes").style.display = "block";
+        }
+
+        function getMovieInfo(movieName) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (xhttp.readyState < 4) {  
+                    document.getElementById("mData").style.display = "block";
+                    document.getElementById("mImg").src = "loader.gif";
+                } else if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    document.getElementById("mData").style.display = "block";
+                    var movieData = xhttp.responseText;
+                    document.getElementById("mImg").src = JSON.parse(xhttp.responseText).Poster;
+                    document.getElementById("movieTitle").innerText = JSON.parse(xhttp.responseText).Title;
+                    document.getElementById("director").innerHTML = JSON.parse(xhttp.responseText).Director;
+                    document.getElementById("released").innerHTML = JSON.parse(xhttp.responseText).Released;
+                    document.getElementById("runTime").innerHTML = JSON.parse(xhttp.responseText).Runtime;
+                    document.getElementById("inputData").value = "";
+                    console.log(movieData);
+                } 
+            }
+            xhttp.open("GET", "https://omdbapi.com/?t=" + movieName + "&apikey=c429066e", true);
+            xhttp.send();
+        }
+
+        function randomJokesGen() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    var responseData = JSON.parse(xhttp.responseText); // Parse JSON response
+                    var joke = responseData[0].setup + " " + responseData[0].punchline; // Concatenate setup and punchline
+                    document.getElementById("randomJokes").innerText = joke; // Display the joke
+                }
+            };
+            xhttp.open("GET", "https://official-joke-api.appspot.com/jokes/programming/random", true);
+            xhttp.send();
+        }
+
+        function logOutUser() { 
+            window.location.href = "index.html";
+            localStorage.removeItem("loggedUser");
+        }
+    </script>
 </body>
-
-<script>
-
-function loUser(){
-    var logUser = localStorage.getItem("loggedUser");
-    logUser = logUser.replace(/['"]+/g, '')
-    var printNav = "Welcome"+"  " + logUser
-    document.getElementById("loUser").innerText = printNav 
-   
-}
-loUser()
-
-function enableMovieinfo(){
-    document.getElementById("movieInfo").style.display="block";
-    document.getElementById("raJokes").style.display="none"
-}
-
-
-function enableRandomJokes(){
-    document.getElementById("movieInfo").style.display="none";
-    document.getElementById("raJokes").style.display="block" 
-}
-
-
-function getMovieInfo(movieName){
-   
-    
-// alert(movieName)
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function (){
-    //   alert(xhttp.readyState);
-    if(xhttp.readyState<4){  
-        document.getElementById("mData").style.display = "block" 
-        document.getElementById("mImg").src = "loader.gif"
-      }
-      else if(xhttp.readyState==4 && xhttp.status==200){
-document.getElementById("mData").style.display = "block";
-var movieData = xhttp.responseText;
-document.getElementById("mImg").src = JSON.parse(xhttp.responseText).Poster;
-document.getElementById("movieTitle").innerText= JSON.parse(xhttp.responseText).Title;
-document.getElementById("director").innerHTML= JSON.parse(xhttp.responseText).Director;
-document.getElementById("released").innerHTML= JSON.parse(xhttp.responseText).Released;
-document.getElementById("runTime").innerHTML= JSON.parse(xhttp.responseText).Runtime;
-document.getElementById("inputData").value = ""
-
-console.log(movieData);
-      } 
-  }
-  xhttp.open("GET","https://omdbapi.com/?t="+movieName+"&apikey=c429066e", true);
-  xhttp.send();
-  
-  }
-
-
-
-  var userLoggedIn = localStorage.getItem("loggedUser");
-//  console.log(userLoggedIn)
-    function randomJokesGen(){
-// alert(movieName)
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function (){
-    //   alert(xhttp.readyState);
-    if(xhttp.readyState==4 && xhttp.status==200){
-// document.getElementById("randomJokes").innerHTML = "block";
-var movieData = xhttp.responseText;
-        var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
-        var responseData = JSON.parse(xhttp.responseText); // Parse JSON response
-        var joke = responseData[0].setup + " " + responseData[0].punchline; // Concatenate setup and punchline
-        document.getElementById("randomJokes").innerHTML = joke; // Display the joke
-    }
-};
-// document.getElementById("movieTitle").innerText= JSON.parse(xhttp.responseText).Title;
-// document.getElementById("director").innerHTML= JSON.parse(xhttp.responseText).Director;
-// document.getElementById("released").innerHTML= JSON.parse(xhttp.responseText).Released;
-// document.getElementById("runTime").innerHTML= JSON.parse(xhttp.responseText).Runtime;
-
-// console.log(movieData);
-      }}
-  xhttp.open("GET","https://official-joke-api.appspot.com/jokes/programming/random", true);
-  xhttp.send();
-  
-  }
-  randomJokesGen()
-
-
-function logOutUser (){ 
-   window.location.href = "index.html"
-    localStorage.removeItem("loggedUser");
-   
-}
-
-</script>
-
-
 </html>
