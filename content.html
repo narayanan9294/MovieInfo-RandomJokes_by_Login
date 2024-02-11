@@ -117,8 +117,14 @@ console.log(movieData);
     if(xhttp.readyState==4 && xhttp.status==200){
 // document.getElementById("randomJokes").innerHTML = "block";
 var movieData = xhttp.responseText;
-         var joke = responseData[0].setup + " " + responseData[0].punchline; // Concatenate setup and punchline
-document.getElementById("randomJokes").innerHTML = joke;
+        var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+        var responseData = JSON.parse(xhttp.responseText); // Parse JSON response
+        var joke = responseData[0].setup + " " + responseData[0].punchline; // Concatenate setup and punchline
+        document.getElementById("randomJokes").innerHTML = joke; // Display the joke
+    }
+};
 // document.getElementById("movieTitle").innerText= JSON.parse(xhttp.responseText).Title;
 // document.getElementById("director").innerHTML= JSON.parse(xhttp.responseText).Director;
 // document.getElementById("released").innerHTML= JSON.parse(xhttp.responseText).Released;
