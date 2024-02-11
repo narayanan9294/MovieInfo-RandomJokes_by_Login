@@ -117,7 +117,8 @@ console.log(movieData);
     if(xhttp.readyState==4 && xhttp.status==200){
 // document.getElementById("randomJokes").innerHTML = "block";
 var movieData = xhttp.responseText;
-document.getElementById("randomJokes").innerHTML = JSON.parse(xhttp.responseText).value.joke;
+         var joke = responseData[0].setup + " " + responseData[0].punchline; // Concatenate setup and punchline
+document.getElementById("randomJokes").innerHTML = joke;
 // document.getElementById("movieTitle").innerText= JSON.parse(xhttp.responseText).Title;
 // document.getElementById("director").innerHTML= JSON.parse(xhttp.responseText).Director;
 // document.getElementById("released").innerHTML= JSON.parse(xhttp.responseText).Released;
